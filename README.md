@@ -1,5 +1,5 @@
 # Uxintace
-Type game android 16 Kotlin
+Type game 2D for  Android 16 < Kotlin
 
 1. app/src/main/java/com/example/uxintace/Cell.kt
 2. app/src/main/java/com/example/uxintace/GameBoard.kt
@@ -9,39 +9,7 @@ Type game android 16 Kotlin
 6. app/src/main/AndroidManifest.xml
 7. app/build.gradle.kts
 8. app/proguard-rules.pro
-9. .github/workflows/build.yml (opcionális)
-
-Uxintace/
-├── .github/
-│   └── workflows/
-│       └── build.yml
-├── app/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/
-│   │   │   │       └── example/
-│   │   │   │           └── uxintace/
-│   │   │   │               ├── Cell.kt
-│   │   │   │               ├── GameBoard.kt
-│   │   │   │               ├── GameView.kt
-│   │   │   │               └── MainActivity.kt
-│   │   │   ├── res/
-│   │   │   │   └── layout/
-│   │   │   │       └── activity_main.xml
-│   │   │   └── AndroidManifest.xml
-│   │   └── test/ (opcionális)
-│   ├── build.gradle.kts
-│   └── proguard-rules.pro
-├── gradle/
-│   └── wrapper/
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── build.gradle.kts (projekt szintű)
-├── settings.gradle.kts
-├── gradle.properties
-├── local.properties (NE töltsd fel!)
-└── .gitignore
+9. .github/workflows/build.yml 
 
 
 .github/workflows/build.yml
