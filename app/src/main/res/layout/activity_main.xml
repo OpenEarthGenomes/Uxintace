@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="#252525">
-        <Button android:id="@+id/btnPause" android:layout_width="50dp" android:layout_height="50dp" android:text="⏸️" />
+        <Button android:id="@+id/btnPause" android:layout_width="55dp" android:layout_height="55dp" android:text="⏸️" />
         <TextView android:id="@+id/levelText" android:layout_width="wrap_content" android:layout_height="wrap_content" 
             android:text="Level: 1" android:textColor="#FFF" android:layout_toLeftOf="@id/scoreText" android:layout_marginRight="20dp" android:textSize="18sp" android:textStyle="bold"/>
         <TextView android:id="@+id/scoreText" android:layout_width="wrap_content" android:layout_height="wrap_content" 
