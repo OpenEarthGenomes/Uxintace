@@ -4,8 +4,7 @@ import kotlin.random.Random
 class GameBoard(val rows: Int = 60, val cols: Int = 60) {
     var grid = Array(rows) { Array(cols) { Cell(0) } }
     var cursorRow = 30; var cursorCol = 30
-    var grabbedRow = -1; var grabbedCol = -1
-    var isGrabbing = false
+    var isGrabbing = false; var grabbedRow = -1; var grabbedCol = -1
     var score = 0; var isPaused = false; var isGameOver = false
     private var pushTimer = 0f
 
@@ -14,28 +13,49 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
         score = 0; isGameOver = false; isPaused = false; isGrabbing = false; pushTimer = 0f
     }
 
-    fun moveCursor(dx: Int, dy: Int) {
-        if (!isGameOver) {
-            cursorRow = (cursorRow + dy).coerceIn(0, rows - 1)
-            cursorCol = (cursorCol + dx).coerceIn(0, cols - 1)
-        }
-    }
-
     fun toggleGrab() {
         if (isGameOver || isPaused) return
         if (!isGrabbing) {
-            // Megpróbáljuk megfogni a kockát
             if (grid[cursorRow][cursorCol].color != 0) {
-                grabbedRow = cursorRow
-                grabbedCol = cursorCol
-                isGrabbing = true
+                grabbedRow = cursorRow; grabbedCol = cursorCol; isGrabbing = true
             }
         } else {
-            // Csere végrehajtása
             val temp = grid[cursorRow][cursorCol]
             grid[cursorRow][cursorCol] = grid[grabbedRow][grabbedCol]
             grid[grabbedRow][grabbedCol] = temp
             isGrabbing = false
+            checkMatches(cursorRow, cursorCol) // Ellenőrzés csere után
+        }
+    }
+
+    // MATCH-5 ELLENŐRZÉS ÉS TÖRLÉS
+    private fun checkMatches(r: Int, c: Int) {
+        val color = grid[r][c].color
+        if (color == 0) return
+
+        // Vízszintes ellenőrzés
+        var hCount = 1
+        var i = c - 1; while (i >= 0 && grid[r][i].color == color) { hCount++; i-- }
+        i = c + 1; while (i < cols && grid[r][i].color == color) { hCount++; i++ }
+        
+        if (hCount >= 5) {
+            score += hCount * 20
+            // Törlés
+            i = c - 1; while (i >= 0 && grid[r][i].color == color) { grid[r][i] = Cell(0); i-- }
+            i = c + 1; while (i < cols && grid[r][i].color == color) { grid[r][i] = Cell(0); i++ }
+            grid[r][c] = Cell(0)
+        }
+
+        // Függőleges ellenőrzés (ha vízszintesen nem volt meg, vagy akár mellette)
+        var vCount = 1
+        var j = r - 1; while (j >= 0 && grid[j][c].color == color) { vCount++; j-- }
+        j = r + 1; while (j < rows && grid[j][c].color == color) { vCount++; j++ }
+
+        if (vCount >= 5) {
+            score += vCount * 20
+            j = r - 1; while (j >= 0 && grid[j][c].color == color) { grid[j][c] = Cell(0); j-- }
+            j = r + 1; while (j < rows && grid[j][c].color == color) { grid[j][c] = Cell(0); j++ }
+            grid[r][c] = Cell(0)
         }
     }
 
@@ -44,19 +64,11 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
         pushTimer += delta
         if (pushTimer > 2.5f) {
             pushTimer = 0f
-            // Game Over ellenőrzés a jobb szélen
-            for (r in 0 until rows) {
-                if (grid[r][cols - 1].color != 0) {
-                    isGameOver = true
-                    return
-                }
-            }
-            // Tolás jobbra
+            for (r in 0 until rows) if (grid[r][cols - 1].color != 0) { isGameOver = true; return }
             for (r in 0 until rows) {
                 for (c in cols - 1 downTo 1) grid[r][c] = grid[r][c - 1]
-                grid[r][0] = if (Random.nextInt(100) > 97) Cell(Random.nextInt(1, 5)) else Cell(0)
+                grid[r][0] = if (Random.nextInt(100) > 96) Cell(Random.nextInt(1, 5)) else Cell(0)
             }
-            // Ha fogunk valamit, az is tolódik!
             if (isGrabbing) grabbedCol = (grabbedCol + 1).coerceAtMost(cols - 1)
         }
     }
