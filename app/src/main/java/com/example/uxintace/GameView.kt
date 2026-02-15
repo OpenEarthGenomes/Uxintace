@@ -16,7 +16,7 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
         4 to Paint().apply { color = Color.parseColor("#FFD740") }
     )
     private val gridPaint = Paint().apply { color = Color.parseColor("#1AFFFFFF"); strokeWidth = 1f }
-    private val gameOverPaint = Paint().apply { color = Color.WHITE; textSize = 100f; textAlign = Paint.Align.CENTER; isFakeBoldText = true }
+    private val gameOverPaint = Paint().apply { color = Color.WHITE; textSize = 80f; textAlign = Paint.Align.CENTER; isFakeBoldText = true }
 
     init { holder.addCallback(this) }
     override fun surfaceCreated(h: SurfaceHolder) { thread = GameThread(h).apply { running = true; start() } }
@@ -34,8 +34,10 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
                 val cw = width / board.cols.toFloat()
                 val ch = height / board.rows.toFloat()
 
+                // Rács rajzolása
                 for (i in 0..board.cols) canvas.drawLine(i*cw, 0f, i*cw, height.toFloat(), gridPaint)
 
+                // Blokkok rajzolása
                 for (r in 0 until board.rows) {
                     for (c in 0 until board.cols) {
                         val cell = board.grid[r][c]
@@ -45,13 +47,20 @@ class GameView(context: Context, attrs: AttributeSet?) : SurfaceView(context, at
                     }
                 }
 
-                val cursorPaint = Paint().apply {
-                    color = if (board.isGrabbing) Color.WHITE else Color.parseColor("#808080")
-                    style = Paint.Style.STROKE; strokeWidth = 5f
+                // Megfogott kocka jelzése (fehér keret)
+                if (board.isGrabbing) {
+                    val grabbedPaint = Paint().apply { color = Color.WHITE; style = Paint.Style.STROKE; strokeWidth = 4f }
+                    canvas.drawRect(board.grabbedCol*cw, board.grabbedRow*ch, (board.grabbedCol+1)*cw, (board.grabbedRow+1)*ch, grabbedPaint)
                 }
+
+                // Kurzor rajzolása
+                val cursorPaint = Paint().apply { color = Color.parseColor("#808080"); style = Paint.Style.STROKE; strokeWidth = 5f }
                 canvas.drawRect(board.cursorCol*cw, board.cursorRow*ch, (board.cursorCol+1)*cw, (board.cursorRow+1)*ch, cursorPaint)
 
-                if (board.isGameOver) canvas.drawText("GAME OVER", width/2f, height/2f, gameOverPaint)
+                if (board.isGameOver) {
+                    canvas.drawRect(0f, height/2f - 100f, width.toFloat(), height/2f + 50f, Paint().apply { color = Color.parseColor("#CC000000") })
+                    canvas.drawText("GAME OVER - TAP RESTART", width/2f, height/2f, gameOverPaint)
+                }
                 holder.unlockCanvasAndPost(canvas)
             }
         }
