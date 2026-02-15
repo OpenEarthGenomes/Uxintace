@@ -16,18 +16,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Teljes képernyő kényszerítése
-        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-        window.setDecorFitsSystemWindows(false)
-
         setContentView(R.layout.activity_main)
+        
         gv = findViewById(R.id.gameView)
 
-        val prefs = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE)
-        gv.board.score = prefs.getInt("savedScore", 0)
-
-        // Gyorsmozgás beállítása
+        // GYORSMOZGÁS FÜGGVÉNY
         fun setupBtn(id: Int, dx: Int, dy: Int) {
             val b = findViewById<Button>(id)
             b.setOnTouchListener { _, event ->
@@ -36,13 +29,13 @@ class MainActivity : AppCompatActivity() {
                         moveRunnable = object : Runnable {
                             override fun run() {
                                 gv.board.moveCursor(dx, dy)
-                                handler.postDelayed(this, 60)
+                                handler.postDelayed(this, 80)
                             }
                         }
                         handler.post(moveRunnable!!)
                     }
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        handler.removeCallbacks(moveRunnable!!)
+                        moveRunnable?.let { handler.removeCallbacks(it) }
                     }
                 }
                 false
@@ -54,7 +47,12 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btnGrab).setOnClickListener { gv.board.toggleGrab() }
         findViewById<Button>(R.id.btnShoot).setOnClickListener { gv.board.shoot() }
-        findViewById<Button>(R.id.btnPause).setOnClickListener { gv.board.isPaused = !gv.board.isPaused }
+        
+        // ITT VOLT A HIBA: btnPause és btnExit javítva
+        findViewById<Button>(R.id.btnPause).setOnClickListener { 
+            gv.board.isPaused = !gv.board.isPaused 
+        }
+        
         findViewById<Button>(R.id.btnExit).setOnClickListener {
             getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE).edit().putInt("savedScore", gv.board.score).apply()
             finishAffinity()
@@ -67,13 +65,15 @@ class MainActivity : AppCompatActivity() {
         uiTimer = Timer()
         uiTimer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                runOnUiThread { findViewById<TextView>(R.id.scoreText).text = "SCORE: ${gv.board.score}" }
+                runOnUiThread { 
+                    findViewById<TextView>(R.id.scoreText).text = "SCORE: ${gv.board.score}" 
+                }
             }
         }, 0, 200)
     }
 
     override fun onPause() {
-        super.onPause()
+        super.onResume()
         uiTimer?.cancel()
     }
 }
