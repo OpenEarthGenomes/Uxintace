@@ -11,3 +11,49 @@ Type game android 16 Kotlin
 8. app/proguard-rules.pro
 9. .github/workflows/build.yml (opcionális)
 
+Uxintace/
+├── .github/
+│   └── workflows/
+│       └── build.yml
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/
+│   │   │   │       └── example/
+│   │   │   │           └── uxintace/
+│   │   │   │               ├── Cell.kt
+│   │   │   │               ├── GameBoard.kt
+│   │   │   │               ├── GameView.kt
+│   │   │   │               └── MainActivity.kt
+│   │   │   ├── res/
+│   │   │   │   └── layout/
+│   │   │   │       └── activity_main.xml
+│   │   │   └── AndroidManifest.xml
+│   │   └── test/ (opcionális, nem kell most)
+│   ├── build.gradle.kts
+│   └── proguard-rules.pro
+├── gradle/
+│   └── wrapper/
+│       ├── gradle-wrapper.jar (automatikus)
+│       └── gradle-wrapper.properties (automatikus)
+├── build.gradle.kts (projekt szintű)
+├── settings.gradle.kts
+├── gradle.properties
+├── local.properties (automatikus, nem kell feltölteni)
+└── .gitignore
+
+.github/workflows/build.yml
+app/src/main/java/com/example/uxintace/Cell.kt
+app/src/main/java/com/example/uxintace/GameBoard.kt
+app/src/main/java/com/example/uxintace/GameView.kt
+app/src/main/java/com/example/uxintace/MainActivity.kt
+app/src/main/res/layout/activity_main.xml
+app/src/main/AndroidManifest.xml
+app/build.gradle.kts
+app/proguard-rules.pro
+gradle/wrapper/gradle-wrapper.properties (automatikus)
+build.gradle.kts (projekt szintű)
+settings.gradle.kts
+gradle.properties
+.gitignore
