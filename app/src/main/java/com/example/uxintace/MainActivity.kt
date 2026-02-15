@@ -17,27 +17,34 @@ class MainActivity : AppCompatActivity() {
         gv = findViewById(R.id.gameView)
         val scoreTv = findViewById<TextView>(R.id.scoreText)
         val pauseBtn = findViewById<Button>(R.id.btnPause)
-        val exitBtn = findViewById<Button>(R.id.btnExit) // Ezt hozzá kell adni az XML-be!
+        val exitBtn = findViewById<Button>(R.id.btnExit)
 
-        // BETÖLTÉS (Auto-load)
+        // Mentés betöltése
         val prefs = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE)
         gv.board.score = prefs.getInt("savedScore", 0)
 
-        // UI Frissítő szál (hogy látszódjon a Score számláló)
-        Thread {
-            while (true) {
-                runOnUiThread {
-                    scoreTv.text = "SCORE: ${gv.board.score}"
-                    scoreTv.bringToFront() // Hogy a rács ne takarja el!
+        // UI Frissítő szál a Score-hoz
+        val uiThread = Thread {
+            while (!Thread.currentThread().isInterrupted) {
+                try {
+                    runOnUiThread {
+                        scoreTv.text = "SCORE: ${gv.board.score}"
+                        scoreTv.bringToFront()
+                    }
+                    Thread.sleep(200)
+                } catch (e: InterruptedException) {
+                    break
                 }
-                Thread.sleep(200)
             }
-        }.start()
+        }
+        uiThread.start()
 
+        // Gombok beállítása findViewById-val (így nem lesz Unresolved reference hiba)
         findViewById<Button>(R.id.btnUp).setOnClickListener { gv.board.moveCursor(0, -1) }
         findViewById<Button>(R.id.btnDown).setOnClickListener { gv.board.moveCursor(0, 1) }
         findViewById<Button>(R.id.btnLeft).setOnClickListener { gv.board.moveCursor(-1, 0) }
         findViewById<Button>(R.id.btnRight).setOnClickListener { gv.board.moveCursor(1, 0) }
+        
         findViewById<Button>(R.id.btnGrab).setOnClickListener { gv.board.toggleGrab() }
         findViewById<Button>(R.id.btnShoot).setOnClickListener { gv.board.shoot() }
         
@@ -45,7 +52,6 @@ class MainActivity : AppCompatActivity() {
             if (gv.board.isGameOver) gv.board.reset() else gv.board.isPaused = !gv.board.isPaused 
         }
 
-        // KILÉPÉS ÉS MENTÉS
         exitBtn.setOnClickListener {
             saveData()
             finishAffinity()
@@ -60,6 +66,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        saveData() // Automata mentés ha kilépsz az appból
+        saveData()
     }
 }
