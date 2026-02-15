@@ -4,29 +4,60 @@ import kotlin.random.Random
 class GameBoard(val rows: Int = 60, val cols: Int = 60) {
     var grid = Array(rows) { Array(cols) { Cell(0) } }
     var cursorRow = 30; var cursorCol = 30
-    var score = 0; var level = 1; var isPaused = false
-    private var spawnTimer = 0f
-
-    init {
-        for (i in 0..20) grid[Random.nextInt(rows)][Random.nextInt(cols)] = Cell(Random.nextInt(1, 5))
-    }
+    var grabbedRow = -1; var grabbedCol = -1
+    var isGrabbing = false
+    var score = 0; var level = 1; var isPaused = false; var isGameOver = false
+    private var pushTimer = 0f
+    private val pushThreshold = 2.5f
 
     fun moveCursor(dx: Int, dy: Int) {
-        if (!isPaused) {
+        if (!isPaused && !isGameOver) {
             cursorRow = (cursorRow + dy).coerceIn(0, rows - 1)
             cursorCol = (cursorCol + dx).coerceIn(0, cols - 1)
         }
     }
 
-    fun toggleGrab() { /* Itt lehet a csere logika */ }
-    fun shoot() { if(!isPaused && !grid[cursorRow][cursorCol].isEmpty) { grid[cursorRow][cursorCol] = Cell(0); score += 10 } }
-    
+    fun toggleGrab() {
+        if (isPaused || isGameOver) return
+        if (!isGrabbing) {
+            if (!grid[cursorRow][cursorCol].isEmpty) {
+                grabbedRow = cursorRow; grabbedCol = cursorCol; isGrabbing = true
+            }
+        } else {
+            val temp = grid[cursorRow][cursorCol]
+            grid[cursorRow][cursorCol] = grid[grabbedRow][grabbedCol]
+            grid[grabbedRow][grabbedCol] = temp
+            isGrabbing = false
+            checkMatches(cursorRow, cursorCol)
+        }
+    }
+
+    private fun checkMatches(r: Int, c: Int) {
+        val color = grid[r][c].color
+        if (color == 0) return
+        if (c > 1 && grid[r][c-1].color == color && grid[r][c-2].color == color) {
+            grid[r][c] = Cell(0); grid[r][c-1] = Cell(0); grid[r][c-2] = Cell(0)
+            score += 100
+        }
+    }
+
     fun update(delta: Float) {
-        if (isPaused) return
-        spawnTimer += delta
-        if (spawnTimer > 2f) {
-            spawnTimer = 0f
-            grid[Random.nextInt(rows)][Random.nextInt(cols)] = Cell(Random.nextInt(1, 5))
+        if (isPaused || isGameOver) return
+        pushTimer += delta
+        if (pushTimer > pushThreshold) {
+            pushTimer = 0f
+            for (r in 0 until rows) if (!grid[r][cols - 1].isEmpty) { isGameOver = true; return }
+            for (r in 0 until rows) {
+                for (c in cols - 1 downTo 1) grid[r][c] = grid[r][c - 1]
+                grid[r][0] = if (Random.nextInt(100) > 97) Cell(Random.nextInt(1, 5)) else Cell(0)
+            }
+        }
+    }
+    
+    fun shoot() {
+        if (!isPaused && !grid[cursorRow][cursorCol].isEmpty) {
+            grid[cursorRow][cursorCol] = Cell(0)
+            score += 10
         }
     }
 }
