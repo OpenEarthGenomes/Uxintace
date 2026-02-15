@@ -1,56 +1,79 @@
 package com.example.uxintace
+
 import android.content.Context
-import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
+import android.os.*
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private lateinit var gv: GameView
+    private var uiTimer: Timer? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private var moveRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Teljes képernyő kényszerítése
+        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        window.setDecorFitsSystemWindows(false)
+
         setContentView(R.layout.activity_main)
-
         gv = findViewById(R.id.gameView)
-        val scoreTv = findViewById<TextView>(R.id.scoreText)
-        val pauseBtn = findViewById<Button>(R.id.btnPause)
-        val exitBtn = findViewById<Button>(R.id.btnExit)
 
-        // Betöltés
         val prefs = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE)
         gv.board.score = prefs.getInt("savedScore", 0)
 
-        // UI Frissítő loop
-        val timer = java.util.Timer()
-        timer.scheduleAtFixedRate(object : java.util.TimerTask() {
-            override fun run() {
-                runOnUiThread {
-                    scoreTv.text = "SCORE: ${gv.board.score}"
-                    if (gv.board.isGameOver) pauseBtn.text = "🔄" 
-                    else pauseBtn.text = if (gv.board.isPaused) "▶️" else "⏸️"
+        // Gyorsmozgás beállítása
+        fun setupBtn(id: Int, dx: Int, dy: Int) {
+            val b = findViewById<Button>(id)
+            b.setOnTouchListener { _, event ->
+                when(event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        moveRunnable = object : Runnable {
+                            override fun run() {
+                                gv.board.moveCursor(dx, dy)
+                                handler.postDelayed(this, 60)
+                            }
+                        }
+                        handler.post(moveRunnable!!)
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        handler.removeCallbacks(moveRunnable!!)
+                    }
                 }
+                false
             }
-        }, 0, 200)
-
-        findViewById<Button>(R.id.btnUp).setOnClickListener { gv.board.moveCursor(0, -1) }
-        findViewById<Button>(R.id.btnDown).setOnClickListener { gv.board.moveCursor(0, 1) }
-        findViewById<Button>(R.id.btnLeft).setOnClickListener { gv.board.moveCursor(-1, 0) }
-        findViewById<Button>(R.id.btnRight).setOnClickListener { gv.board.moveCursor(1, 0) }
-        findViewById<Button>(R.id.btnGrab).setOnClickListener { gv.board.toggleGrab() }
-        findViewById<Button>(R.id.btnShoot).setOnClickListener { gv.board.shoot() }
-        
-        pauseBtn.setOnClickListener { 
-            if (gv.board.isGameOver) gv.board.reset() else gv.board.isPaused = !gv.board.isPaused 
         }
 
-        exitBtn.setOnClickListener {
-            val editor = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE).edit()
-            editor.putInt("savedScore", gv.board.score)
-            editor.apply()
+        setupBtn(R.id.btnUp, 0, -1); setupBtn(R.id.btnDown, 0, 1)
+        setupBtn(R.id.btnLeft, -1, 0); setupBtn(R.id.btnRight, 1, 0)
+
+        findViewById<Button>(R.id.btnGrab).setOnClickListener { gv.board.toggleGrab() }
+        findViewById<Button>(R.id.btnShoot).setOnClickListener { gv.board.shoot() }
+        findViewById<Button>(R.id.btnPause).setOnClickListener { gv.board.isPaused = !gv.board.isPaused }
+        findViewById<Button>(R.id.btnExit).setOnClickListener {
+            getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE).edit().putInt("savedScore", gv.board.score).apply()
             finishAffinity()
             exitProcess(0)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        uiTimer = Timer()
+        uiTimer?.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                runOnUiThread { findViewById<TextView>(R.id.scoreText).text = "SCORE: ${gv.board.score}" }
+            }
+        }, 0, 200)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        uiTimer?.cancel()
     }
 }
