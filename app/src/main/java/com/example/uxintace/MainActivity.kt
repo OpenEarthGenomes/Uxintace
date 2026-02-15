@@ -18,17 +18,21 @@ class MainActivity : AppCompatActivity() {
         val pauseBtn = findViewById<Button>(R.id.btnPause)
         val exitBtn = findViewById<Button>(R.id.btnExit)
 
+        // Betöltés
         val prefs = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE)
         gv.board.score = prefs.getInt("savedScore", 0)
 
-        Thread {
-            while (true) {
-                try {
-                    runOnUiThread { scoreTv.text = "SCORE: ${gv.board.score}" }
-                    Thread.sleep(200)
-                } catch (e: Exception) {}
+        // UI Frissítő loop
+        val timer = java.util.Timer()
+        timer.scheduleAtFixedRate(object : java.util.TimerTask() {
+            override fun run() {
+                runOnUiThread {
+                    scoreTv.text = "SCORE: ${gv.board.score}"
+                    if (gv.board.isGameOver) pauseBtn.text = "🔄" 
+                    else pauseBtn.text = if (gv.board.isPaused) "▶️" else "⏸️"
+                }
             }
-        }.start()
+        }, 0, 200)
 
         findViewById<Button>(R.id.btnUp).setOnClickListener { gv.board.moveCursor(0, -1) }
         findViewById<Button>(R.id.btnDown).setOnClickListener { gv.board.moveCursor(0, 1) }
@@ -42,10 +46,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         exitBtn.setOnClickListener {
-            getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE).edit().putInt("savedScore", gv.board.score).apply()
+            val editor = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE).edit()
+            editor.putInt("savedScore", gv.board.score)
+            editor.apply()
             finishAffinity()
             exitProcess(0)
         }
     }
 }
-
