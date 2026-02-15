@@ -4,25 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#000"
-    android:paddingBottom="80dp" 
-    android:paddingTop="40dp">
+    android:paddingBottom="85dp" 
+    android:paddingTop="45dp">
 
     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="10dp">
-        <Button android:id="@+id/btnExit" android:layout_width="50dp" android:layout_height="50dp" android:text="❌" />
-        <Button android:id="@+id/btnPause" android:layout_width="50dp" android:layout_height="50dp" android:text="⏸" android:layout_toRightOf="@id/btnExit" android:layout_marginLeft="10dp"/>
-        <TextView android:id="@+id/scoreText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SCORE: 0" android:textColor="#00FF00" android:layout_alignParentRight="true" android:textSize="22sp" />
+        <Button android:id="@+id/btnExit" android:layout_width="70dp" android:layout_height="60dp" android:text="❌" android:backgroundTint="#333" />
+        <Button android:id="@+id/btnPause" android:layout_width="70dp" android:layout_height="60dp" android:text="⏸" android:layout_toRightOf="@id/btnExit" android:layout_marginLeft="15dp" android:backgroundTint="#333" />
+        <TextView android:id="@+id/scoreText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SCORE: 0" android:textColor="#00FF00" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:textSize="22sp" />
     </RelativeLayout>
 
     <com.example.uxintace.GameView android:id="@+id/gameView" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
-        <Button android:id="@+id/btnUp" android:text="FEL" android:layout_width="80dp" android:layout_height="50dp" />
+        <Button android:id="@+id/btnUp" android:text="FEL" android:layout_width="85dp" android:layout_height="55dp" />
         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
-            <Button android:id="@+id/btnLeft" android:text="BAL" android:layout_width="80dp" android:layout_height="50dp" />
-            <Button android:id="@+id/btnGrab" android:text="FOG" android:layout_width="100dp" android:layout_height="60dp" />
-            <Button android:id="@+id/btnRight" android:text="JOBB" android:layout_width="80dp" android:layout_height="50dp" />
+            <Button android:id="@+id/btnLeft" android:text="BAL" android:layout_width="85dp" android:layout_height="55dp" />
+            <Button android:id="@+id/btnGrab" android:text="FOG" android:layout_width="110dp" android:layout_height="65dp" android:layout_margin="5dp" />
+            <Button android:id="@+id/btnRight" android:text="JOBB" android:layout_width="85dp" android:layout_height="55dp" />
         </LinearLayout>
-        <Button android:id="@+id/btnDown" android:text="LE" android:layout_width="80dp" android:layout_height="50dp" />
-        <Button android:id="@+id/btnShoot" android:text="LÖVÉS" android:layout_width="200dp" android:layout_height="60dp" android:backgroundTint="#F00" />
+        <Button android:id="@+id/btnDown" android:text="LE" android:layout_width="85dp" android:layout_height="55dp" />
+        <Button android:id="@+id/btnShoot" android:text="LÖVÉS" android:layout_width="220dp" android:layout_height="65dp" android:backgroundTint="#F00" />
     </LinearLayout>
 </LinearLayout>
