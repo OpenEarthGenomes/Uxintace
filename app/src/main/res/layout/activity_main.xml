@@ -7,8 +7,11 @@
     android:paddingBottom="80dp" 
     android:paddingTop="40dp">
 
-    <TextView android:id="@+id/scoreText" android:layout_width="match_parent" android:layout_height="wrap_content" 
-        android:text="SCORE: 0" android:textColor="#0FF" android:textSize="20sp" android:gravity="center" />
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="10dp">
+        <Button android:id="@+id/btnExit" android:layout_width="50dp" android:layout_height="50dp" android:text="❌" />
+        <Button android:id="@+id/btnPause" android:layout_width="50dp" android:layout_height="50dp" android:text="⏸" android:layout_toRightOf="@id/btnExit" android:layout_marginLeft="10dp"/>
+        <TextView android:id="@+id/scoreText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SCORE: 0" android:textColor="#00FF00" android:layout_alignParentRight="true" android:textSize="22sp" />
+    </RelativeLayout>
 
     <com.example.uxintace.GameView android:id="@+id/gameView" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
