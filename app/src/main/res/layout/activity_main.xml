@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1E1E1E">
+
+    <!-- Felső információs sáv -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:background="#2C2C2C">
+
+        <Button
+            android:id="@+id/btnPause"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:text="⏸️"
+            android:textSize="24sp"
+            android:backgroundTint="#FF5722" />
+
+        <TextView
+            android:id="@+id/levelText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Level: 1"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/scoreText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Score: 0"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- Játéktér -->
+    <com.example.uxintace.GameView
+        android:id="@+id/gameView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Alsó vezérlőpanel -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#2C2C2C"
+        android:padding="16dp">
+
+        <!-- Felső gomb -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/btnUp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:text="⬆️"
+                android:textSize="30sp"
+                android:backgroundTint="#FF9800" />
+        </LinearLayout>
+
+        <!-- Középső gombsor -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLeft"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:text="⬅️"
+                android:textSize="30sp"
+                android:backgroundTint="#FF9800"
+                android:layout_marginHorizontal="8dp"/>
+
+            <Button
+                android:id="@+id/btnGrab"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:text="🤚"
+                android:textSize="40sp"
+                android:backgroundTint="#4CAF50"
+                android:layout_marginHorizontal="8dp"/>
+
+            <Button
+                android:id="@+id/btnRight"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:text="➡️"
+                android:textSize="30sp"
+                android:backgroundTint="#FF9800"
+                android:layout_marginHorizontal="8dp"/>
+        </LinearLayout>
+
+        <!-- Alsó gomb -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/btnDown"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:text="⬇️"
+                android:textSize="30sp"
+                android:backgroundTint="#FF9800" />
+        </LinearLayout>
+
+        <!-- Shot gomb -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="8dp">
+            <Button
+                android:id="@+id/btnShoot"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:text="🔫 SHOT"
+                android:textSize="18sp"
+                android:backgroundTint="#F44336" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
