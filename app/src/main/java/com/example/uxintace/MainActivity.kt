@@ -14,11 +14,13 @@ class MainActivity : AppCompatActivity() {
         val gv = findViewById<GameView>(R.id.gameView)
         val scoreTv = findViewById<TextView>(R.id.scoreText)
         val levelTv = findViewById<TextView>(R.id.levelText)
+        val pauseBtn = findViewById<Button>(R.id.btnPause)
 
         Timer().scheduleAtFixedRate(timerTask {
             runOnUiThread {
                 scoreTv.text = "Score: ${gv.board.score}"
                 levelTv.text = "Level: ${gv.board.level}"
+                if (gv.board.isGameOver) pauseBtn.text = "🔄" else pauseBtn.text = if (gv.board.isPaused) "▶️" else "⏸️"
             }
         }, 0, 300)
 
@@ -28,7 +30,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnRight).setOnClickListener { gv.board.moveCursor(1, 0) }
         findViewById<Button>(R.id.btnGrab).setOnClickListener { gv.board.toggleGrab() }
         findViewById<Button>(R.id.btnShoot).setOnClickListener { gv.board.shoot() }
-        findViewById<Button>(R.id.btnPause).setOnClickListener { gv.board.isPaused = !gv.board.isPaused }
+        
+        pauseBtn.setOnClickListener { 
+            if (gv.board.isGameOver) {
+                gv.board.reset()
+            } else {
+                gv.board.isPaused = !gv.board.isPaused 
+            }
+        }
     }
 }
-
