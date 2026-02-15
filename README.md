@@ -3,6 +3,7 @@
 **Fejlesztő:** Fáber Sándor
 **Verzió:** 1.0 
 **Licenc:** MIT​
+
 **Nyelv: Kotlin 1.9+**
 ​**SDK: Target SDK 35 (Android 16 kompatibilis) ​**
 **Build System: Gradle 8.10.2 (Kotlin DSL - build.gradle.kts) ​CI/CD: GitHub Actions (Automatikus APK build minden commit után)**
