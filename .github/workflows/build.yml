@@ -13,13 +13,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      # Ez a hivatalos Gradle Action, ami letölti a Gradle-t és legenerálja a wrappert
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 8.10.2
+      # Ez a parancs most már ténylegesen legenerálja a gradlew fájlt
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper --gradle-version 8.10.2
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -32,3 +29,4 @@ jobs:
         with:
           name: Uxintace-Debug-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+
