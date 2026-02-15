@@ -1,5 +1,4 @@
 package com.example.uxintace
-
 import android.content.Context
 import android.os.Bundle
 import android.widget.Button
@@ -19,32 +18,22 @@ class MainActivity : AppCompatActivity() {
         val pauseBtn = findViewById<Button>(R.id.btnPause)
         val exitBtn = findViewById<Button>(R.id.btnExit)
 
-        // Mentés betöltése
         val prefs = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE)
         gv.board.score = prefs.getInt("savedScore", 0)
 
-        // UI Frissítő szál a Score-hoz
-        val uiThread = Thread {
-            while (!Thread.currentThread().isInterrupted) {
+        Thread {
+            while (true) {
                 try {
-                    runOnUiThread {
-                        scoreTv.text = "SCORE: ${gv.board.score}"
-                        scoreTv.bringToFront()
-                    }
+                    runOnUiThread { scoreTv.text = "SCORE: ${gv.board.score}" }
                     Thread.sleep(200)
-                } catch (e: InterruptedException) {
-                    break
-                }
+                } catch (e: Exception) {}
             }
-        }
-        uiThread.start()
+        }.start()
 
-        // Gombok beállítása findViewById-val (így nem lesz Unresolved reference hiba)
         findViewById<Button>(R.id.btnUp).setOnClickListener { gv.board.moveCursor(0, -1) }
         findViewById<Button>(R.id.btnDown).setOnClickListener { gv.board.moveCursor(0, 1) }
         findViewById<Button>(R.id.btnLeft).setOnClickListener { gv.board.moveCursor(-1, 0) }
         findViewById<Button>(R.id.btnRight).setOnClickListener { gv.board.moveCursor(1, 0) }
-        
         findViewById<Button>(R.id.btnGrab).setOnClickListener { gv.board.toggleGrab() }
         findViewById<Button>(R.id.btnShoot).setOnClickListener { gv.board.shoot() }
         
@@ -53,19 +42,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         exitBtn.setOnClickListener {
-            saveData()
+            getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE).edit().putInt("savedScore", gv.board.score).apply()
             finishAffinity()
             exitProcess(0)
         }
     }
-
-    private fun saveData() {
-        val prefs = getSharedPreferences("UxintaceSave", Context.MODE_PRIVATE)
-        prefs.edit().putInt("savedScore", gv.board.score).apply()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        saveData()
-    }
 }
+
