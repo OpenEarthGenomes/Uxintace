@@ -1,9 +1,8 @@
 package com.example.uxintace
 import kotlin.random.Random
 
-class Cell(var color: Int) {
-    val isEmpty: Boolean get() = color == 0
-}
+// Csak itt szerepeljen a Cell, ne legyen külön Cell.kt fájl!
+class Cell(var color: Int)
 
 class GameBoard(val rows: Int = 60, val cols: Int = 60) {
     var grid = Array(rows) { Array(cols) { Cell(0) } }
@@ -32,6 +31,7 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
                 grabbedRow = cursorRow; grabbedCol = cursorCol; isGrabbing = true
             }
         } else {
+            // Itt a hiba javítása: a .color értéket cseréljük, nem magát a Cell-t
             val tempColor = grid[cursorRow][cursorCol].color
             grid[cursorRow][cursorCol].color = grid[grabbedRow][grabbedCol].color
             grid[grabbedRow][grabbedCol].color = tempColor
@@ -44,7 +44,7 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
         val color = grid[r][c].color
         if (color == 0) return
         
-        var hList = mutableListOf(Pair(r, c))
+        val hList = mutableListOf(Pair(r, c))
         var i = c - 1; while (i >= 0 && grid[r][i].color == color) { hList.add(Pair(r, i)); i-- }
         i = c + 1; while (i < cols && grid[r][i].color == color) { hList.add(Pair(r, i)); i++ }
         if (hList.size >= 5) {
@@ -52,7 +52,7 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
             hList.forEach { grid[it.first][it.second].color = 0 }
         }
 
-        var vList = mutableListOf(Pair(r, c))
+        val vList = mutableListOf(Pair(r, c))
         var j = r - 1; while (j >= 0 && grid[j][c].color == color) { vList.add(Pair(j, c)); j-- }
         j = r + 1; while (j < rows && grid[j][c].color == color) { vList.add(Pair(j, c)); j++ }
         if (vList.size >= 5) {
@@ -68,7 +68,9 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
             pushTimer = 0f
             for (r in 0 until rows) if (grid[r][cols - 1].color != 0) { isGameOver = true; return }
             for (r in 0 until rows) {
-                for (c in cols - 1 downTo 1) grid[r][c].color = grid[r][c - 1].color
+                for (c in cols - 1 downTo 1) {
+                    grid[r][c].color = grid[r][c - 1].color
+                }
                 grid[r][0].color = if (Random.nextInt(100) > 96) Random.nextInt(1, 5) else 0
             }
             if (isGrabbing) grabbedCol = (grabbedCol + 1).coerceAtMost(cols - 1)
