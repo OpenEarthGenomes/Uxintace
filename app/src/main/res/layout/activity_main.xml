@@ -4,28 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#000"
-    android:paddingTop="50dp"
-    android:paddingBottom="30dp">
+    android:paddingTop="40dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp">
-        <Button android:id="@+id/btnPause" android:layout_width="60dp" android:layout_height="60dp" android:text="⏸️" />
+        android:padding="10dp"
+        android:background="#222">
+        <Button android:id="@+id/btnExit" android:layout_width="60dp" android:layout_height="60dp" android:text="❌" />
+        <Button android:id="@+id/btnPause" android:layout_width="60dp" android:layout_height="60dp" android:text="⏸️" android:layout_toRightOf="@id/btnExit" android:layout_marginLeft="10dp"/>
         <TextView android:id="@+id/scoreText" android:layout_width="wrap_content" android:layout_height="wrap_content" 
-            android:text="Score: 0" android:textColor="#00FF00" android:layout_alignParentRight="true" android:textSize="24sp" android:textStyle="bold"/>
+            android:text="SCORE: 0" android:textColor="#00FF00" android:layout_alignParentRight="true" android:textSize="26sp" android:textStyle="bold" android:background="#44000000" android:padding="5dp"/>
     </RelativeLayout>
 
-    <com.example.uxintace.GameView android:id="@+id/gameView" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_margin="5dp" />
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center" android:padding="10dp">
-        <Button android:id="@+id/btnUp" android:text="⬆️" android:layout_width="80dp" android:layout_height="70dp" android:backgroundTint="#333"/>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
-            <Button android:id="@+id/btnLeft" android:text="⬅️" android:layout_width="80dp" android:layout_height="70dp" android:backgroundTint="#333" android:layout_margin="5dp"/>
-            <Button android:id="@+id/btnGrab" android:text="FOG" android:layout_width="110dp" android:layout_height="70dp" android:backgroundTint="#FF9800"/>
-            <Button android:id="@+id/btnRight" android:text="➡️" android:layout_width="80dp" android:layout_height="70dp" android:backgroundTint="#333" android:layout_margin="5dp"/>
-        </LinearLayout>
-        <Button android:id="@+id/btnDown" android:text="⬇️" android:layout_width="80dp" android:layout_height="70dp" android:backgroundTint="#333"/>
-        <Button android:id="@+id/btnShoot" android:text="🔫 SHOT" android:layout_width="260dp" android:layout_height="75dp" android:backgroundTint="#F44336" android:layout_marginTop="10dp"/>
+    <com.example.uxintace.GameView android:id="@+id/gameView" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+    
     </LinearLayout>
-</LinearLayout>
