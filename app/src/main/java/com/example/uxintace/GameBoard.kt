@@ -10,6 +10,11 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
     private var pushTimer = 0f
     private val pushThreshold = 2.5f
 
+    fun reset() {
+        grid = Array(rows) { Array(cols) { Cell(0) } }
+        score = 0; isGameOver = false; isGrabbing = false; pushTimer = 0f
+    }
+
     fun moveCursor(dx: Int, dy: Int) {
         if (!isPaused && !isGameOver) {
             cursorRow = (cursorRow + dy).coerceIn(0, rows - 1)
@@ -28,16 +33,7 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
             grid[cursorRow][cursorCol] = grid[grabbedRow][grabbedCol]
             grid[grabbedRow][grabbedCol] = temp
             isGrabbing = false
-            checkMatches(cursorRow, cursorCol)
-        }
-    }
-
-    private fun checkMatches(r: Int, c: Int) {
-        val color = grid[r][c].color
-        if (color == 0) return
-        if (c > 1 && grid[r][c-1].color == color && grid[r][c-2].color == color) {
-            grid[r][c] = Cell(0); grid[r][c-1] = Cell(0); grid[r][c-2] = Cell(0)
-            score += 100
+            grabbedRow = -1; grabbedCol = -1
         }
     }
 
@@ -51,6 +47,7 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
                 for (c in cols - 1 downTo 1) grid[r][c] = grid[r][c - 1]
                 grid[r][0] = if (Random.nextInt(100) > 97) Cell(Random.nextInt(1, 5)) else Cell(0)
             }
+            if (isGrabbing) grabbedCol = (grabbedCol + 1).coerceAtMost(cols - 1)
         }
     }
     
@@ -61,3 +58,4 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
         }
     }
 }
+
