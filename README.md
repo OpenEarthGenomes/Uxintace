@@ -30,18 +30,19 @@ Uxintace/
 │   │   │   │   └── layout/
 │   │   │   │       └── activity_main.xml
 │   │   │   └── AndroidManifest.xml
-│   │   └── test/ (opcionális, nem kell most)
+│   │   └── test/ (opcionális)
 │   ├── build.gradle.kts
 │   └── proguard-rules.pro
 ├── gradle/
 │   └── wrapper/
-│       ├── gradle-wrapper.jar (automatikus)
-│       └── gradle-wrapper.properties (automatikus)
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
 ├── build.gradle.kts (projekt szintű)
 ├── settings.gradle.kts
 ├── gradle.properties
-├── local.properties (automatikus, nem kell feltölteni)
+├── local.properties (NE töltsd fel!)
 └── .gitignore
+
 
 .github/workflows/build.yml
 app/src/main/java/com/example/uxintace/Cell.kt
@@ -52,8 +53,8 @@ app/src/main/res/layout/activity_main.xml
 app/src/main/AndroidManifest.xml
 app/build.gradle.kts
 app/proguard-rules.pro
-gradle/wrapper/gradle-wrapper.properties (automatikus)
-build.gradle.kts (projekt szintű)
+gradle/wrapper/gradle-wrapper.properties
+build.gradle.kts
 settings.gradle.kts
 gradle.properties
 .gitignore
