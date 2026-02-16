@@ -10,15 +10,15 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
     var isGrabbing = false
     var score = 0; var isPaused = false; var isGameOver = false
     private var pushTimer = 0f
-    
     var onScoreChanged: ((Int) -> Unit)? = null
 
     init { spawnInitialBlocks() }
 
     fun spawnInitialBlocks() {
-        for (r in 0 until rows) {
+        // Csak a középső tartományba generálunk (20-40 sor)
+        for (r in 20 until 40) {
             for (c in 0 until 10) {
-                if (Random.nextInt(100) > 70) grid[r][c].color = Random.nextInt(1, 5)
+                if (Random.nextInt(100) > 75) grid[r][c].color = Random.nextInt(1, 5)
             }
         }
     }
@@ -61,18 +61,19 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
     fun update(delta: Float) {
         if (isPaused || isGameOver) return
         pushTimer += delta
-        
-        if (pushTimer > 2.5f) { // FIX 2.5 MÁSODPERC
+        if (pushTimer > 3.0f) { // Lassú tempó: 3 másodperc
             pushTimer = 0f
             for (r in 0 until rows) {
-                if (grid[r][cols - 1].color != 0) {
-                    isGameOver = true // Megáll a játék, ha eléri a jobb szélét
-                    return
-                }
+                if (grid[r][cols - 1].color != 0) { isGameOver = true; return }
             }
             for (r in 0 until rows) {
                 for (c in cols - 1 downTo 1) grid[r][c].color = grid[r][c - 1].color
-                grid[r][0].color = if (Random.nextInt(100) > 85) Random.nextInt(1, 5) else 0
+                // Új kockák csak a középső sávban (20-40)
+                if (r in 20..40) {
+                    grid[r][0].color = if (Random.nextInt(100) > 90) Random.nextInt(1, 5) else 0
+                } else {
+                    grid[r][0].color = 0
+                }
             }
             if (isGrabbing) grabbedCol = (grabbedCol + 1).coerceAtMost(cols - 1)
         }
@@ -86,4 +87,3 @@ class GameBoard(val rows: Int = 60, val cols: Int = 60) {
         }
     }
 }
-
